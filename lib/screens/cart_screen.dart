@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/models/cart.dart';
+import 'package:shopapp/models/orders.dart';
 import 'package:shopapp/widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
@@ -28,12 +30,18 @@ class CartScreen extends StatelessWidget {
                   Spacer(),
                   Chip(
                     backgroundColor: Theme.of(context).primaryColor,
-                    label: Text("\$ "+cart.totalAmount.toString(),style: TextStyle(color: Colors.white),),
+                    label: Text("\$ "+cart.totalAmount.toStringAsFixed(2),style: TextStyle(color: Colors.white),),
                   ),
                   FlatButton(
                     textColor: Theme.of(context).primaryColor,
                     child: Text("Order Now"),
-                    onPressed: (){},
+                    onPressed: (){
+                      Provider.of<Orders>(context,listen: false).addOrder(
+                          cart.items.values.toList(),
+                          cart.totalAmount
+                      );
+                      cart.clear();
+                    },
                   )
                 ],
               ),
