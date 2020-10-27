@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopapp/admin/edit_product.dart';
+import 'package:shopapp/provider/product_provider.dart';
 
 class UserProductItem extends StatelessWidget {
+  final String id;
   final String title;
   final String imageUrl;
 
-  UserProductItem(this.title,this.imageUrl);
+  UserProductItem(this.id,this.title,this.imageUrl);
   @override
   Widget build(BuildContext context) {
+    final deletedata = Provider.of<Products>(context);
     return Column(
       children: [
         ListTile(
@@ -15,8 +20,13 @@ class UserProductItem extends StatelessWidget {
                 width: 100,
                     child: Row(
                     children: [
-                    IconButton(icon: Icon(Icons.edit),onPressed: (){},color: Theme.of(context).primaryColor,),
-                    IconButton(icon: Icon(Icons.delete),onPressed: (){},color: Colors.redAccent,),
+                    IconButton(icon: Icon(Icons.edit),onPressed: (){
+                       //Navigator.of(context).pushNamed(EditProduct.routeName,arguments: id);
+                       Navigator.push(context, MaterialPageRoute(builder: (context) => EditProduct(id)));
+                    },color: Theme.of(context).primaryColor,),
+                    IconButton(icon: Icon(Icons.delete),onPressed: (){
+                      deletedata.deleteProduct(id);  
+                    },color: Colors.redAccent,),
                     ],
                     ),
                     ),

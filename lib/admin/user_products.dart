@@ -15,7 +15,7 @@ class UserProducts extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EditProduct()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EditProduct(null)));
             },
             icon: Icon(Icons.add,color: Colors.white,),
           )
@@ -26,7 +26,7 @@ class UserProducts extends StatelessWidget {
         padding: EdgeInsets.all(8.0),
         child: ListView.builder(
             itemCount: productsData.items.length,
-            itemBuilder: (_,i) => UserProductItem(productsData.items[i].title,productsData.items[i].imageUrl),
+            itemBuilder: (_,i) => UserProductItem(productsData.items[i].id,productsData.items[i].title,productsData.items[i].imageUrl),
         ),
       ),
     );
