@@ -25,7 +25,7 @@ class UserProductItem extends StatelessWidget {
                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProduct(id)));
                     },color: Theme.of(context).primaryColor,),
                     IconButton(icon: Icon(Icons.delete),onPressed: (){
-                      deletedata.deleteProduct(id);  
+                      deletedata.deleteProduct(id);
                     },color: Colors.redAccent,),
                     ],
                     ),

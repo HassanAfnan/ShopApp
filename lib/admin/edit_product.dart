@@ -26,6 +26,7 @@ class _EditProductState extends State<EditProduct> {
     'price': '',
     'imageUrl': ''
   };
+  var isLoading = false;
 
   @override
   void initState() {
@@ -83,12 +84,23 @@ class _EditProductState extends State<EditProduct> {
         return;
       }
       form.currentState.save();
+      setState(() {
+        isLoading = true;
+      });
       if(editedProduct.id != null){
         Provider.of<Products>(context,listen: false).updateProduct(editedProduct.id,editedProduct);
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.of(context).pop();
       }else{
-        Provider.of<Products>(context,listen: false).addProduct(editedProduct);
+          Provider.of<Products>(context,listen: false).addProduct(editedProduct).then((value){
+          setState(() {
+            isLoading = false;
+          });
+          Navigator.of(context).pop();
+        });
       }
-      Navigator.of(context).pop();
   }
 
   @override
@@ -105,7 +117,7 @@ class _EditProductState extends State<EditProduct> {
           ),
         ],
       ),
-      body: Padding(
+      body: isLoading ? Center(child: CircularProgressIndicator()) : Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
          key: form,
