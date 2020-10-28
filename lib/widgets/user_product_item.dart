@@ -11,6 +11,7 @@ class UserProductItem extends StatelessWidget {
   UserProductItem(this.id,this.title,this.imageUrl);
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
     final deletedata = Provider.of<Products>(context);
     return Column(
       children: [
@@ -24,10 +25,18 @@ class UserProductItem extends StatelessWidget {
                        //Navigator.of(context).pushNamed(EditProduct.routeName,arguments: id);
                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProduct(id)));
                     },color: Theme.of(context).primaryColor,),
-                    IconButton(icon: Icon(Icons.delete),onPressed: (){
-                      deletedata.deleteProduct(id);
-                    },color: Colors.redAccent,),
-                    ],
+                      IconButton(icon: Icon(Icons.delete),
+                        onPressed: () async {
+                           try{
+                            await deletedata.deleteProduct(id);
+                           }catch(error){
+                             scaffold.showSnackBar(SnackBar(
+                               content: Text('Deleting failed'),
+                             ));
+                           }
+                       },
+                        color: Colors.redAccent,),
+                     ],
                     ),
                     ),
                 leading: CircleAvatar(

@@ -78,7 +78,7 @@ class _EditProductState extends State<EditProduct> {
     super.dispose();
   }
 
-  void saveForm(){
+  Future<void> saveForm() async{
       final isValid = form.currentState.validate();
       if(!isValid){
         return;
@@ -88,19 +88,34 @@ class _EditProductState extends State<EditProduct> {
         isLoading = true;
       });
       if(editedProduct.id != null){
-        Provider.of<Products>(context,listen: false).updateProduct(editedProduct.id,editedProduct);
-        setState(() {
-          isLoading = false;
-        });
-        Navigator.of(context).pop();
+       await Provider.of<Products>(context,listen: false)
+           .updateProduct(editedProduct.id,editedProduct);
       }else{
-          Provider.of<Products>(context,listen: false).addProduct(editedProduct).then((value){
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.of(context).pop();
-        });
+        try {
+          await Provider.of<Products>(context, listen: false)
+              .addProduct(editedProduct);
+        }catch(error){
+          await showDialog(context: context,builder: (ctx) => AlertDialog(
+            title: Text("An Error Occurred"),
+            content: Text("Something went wrong"),
+            actions: [
+              FlatButton(
+                child: Text("Okay"),
+                onPressed: (){
+                  setState(() {
+                    isLoading = false;
+                  });
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ));
+        }
       }
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).pop();
   }
 
   @override
